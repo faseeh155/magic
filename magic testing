@@ -1,0 +1,145 @@
+import { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Bell, Book, Code, GitBranch, GitFork, History, Plus, Search, Star } from 'lucide-react'
+
+export default function GitHubClone() {
+  const [activeTab, setActiveTab] = useState('code')
+
+  const files = [
+    { name: 'README.md', type: 'file' },
+    { name: 'src', type: 'folder', children: [
+      { name: 'index.js', type: 'file' },
+      { name: 'styles.css', type: 'file' },
+    ]},
+    { name: 'package.json', type: 'file' },
+  ]
+
+  return (
+    <div className="min-h-screen bg-white text-gray-900">
+      {/* Header */}
+      <header className="bg-gray-900 text-white p-4">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <GitBranch className="h-8 w-8" />
+            <Input 
+              type="search" 
+              placeholder="Search or jump to..." 
+              className="w-64 bg-gray-800 text-white placeholder-gray-400 border-gray-700"
+            />
+          </div>
+          <nav>
+            <ul className="flex space-x-4">
+              <li><Button variant="ghost">Pull requests</Button></li>
+              <li><Button variant="ghost">Issues</Button></li>
+              <li><Button variant="ghost">Marketplace</Button></li>
+              <li><Button variant="ghost">Explore</Button></li>
+            </ul>
+          </nav>
+          <div className="flex items-center space-x-4">
+            <Bell className="h-5 w-5" />
+            <Plus className="h-5 w-5" />
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@user" />
+              <AvatarFallback>UN</AvatarFallback>
+            </Avatar>
+          </div>
+        </div>
+      </header>
+
+      {/* Repository Info */}
+      <div className="border-b">
+        <div className="container mx-auto py-4">
+          <div className="flex items-center space-x-2 text-xl font-semibold">
+            <Book className="h-5 w-5" />
+            <span>username / repository-name</span>
+          </div>
+          <div className="mt-4 flex space-x-2">
+            <Button variant="outline" size="sm">
+              <GitBranch className="mr-2 h-4 w-4" />
+              main
+            </Button>
+            <Button variant="outline" size="sm">
+              <GitBranch className="mr-2 h-4 w-4" />
+              <span className="font-semibold">2</span> branches
+            </Button>
+            <Button variant="outline" size="sm">
+              <GitFork className="mr-2 h-4 w-4" />
+              <span className="font-semibold">0</span> forks
+            </Button>
+            <Button variant="outline" size="sm">
+              <Star className="mr-2 h-4 w-4" />
+              Star
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main className="container mx-auto py-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList>
+            <TabsTrigger value="code"><Code className="mr-2 h-4 w-4" /> Code</TabsTrigger>
+            <TabsTrigger value="issues">Issues</TabsTrigger>
+            <TabsTrigger value="pull-requests">Pull requests</TabsTrigger>
+            <TabsTrigger value="actions">Actions</TabsTrigger>
+            <TabsTrigger value="projects">Projects</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
+          </TabsList>
+          <TabsContent value="code" className="mt-6">
+            <div className="grid grid-cols-4 gap-6">
+              {/* File Explorer */}
+              <div className="col-span-1 border rounded-lg p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-semibold">Files</h2>
+                  <Button variant="outline" size="sm">
+                    <Plus className="mr-2 h-4 w-4" />
+                    New file
+                  </Button>
+                </div>
+                <ul className="space-y-2">
+                  {files.map((file, index) => (
+                    <li key={index} className="flex items-center">
+                      {file.type === 'folder' ? (
+                        <GitBranch className="mr-2 h-4 w-4" />
+                      ) : (
+                        <Code className="mr-2 h-4 w-4" />
+                      )}
+                      <span>{file.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* Code Viewer */}
+              <div className="col-span-3 border rounded-lg p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-semibold">README.md</h2>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      <History className="mr-2 h-4 w-4" />
+                      History
+                    </Button>
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                </div>
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <h1 className="text-2xl font-bold mb-4">Project Title</h1>
+                  <p className="mb-4">This is a brief description of the project. It explains what the project does, why it's useful, and how to get started.</p>
+                  <h2 className="text-xl font-semibold mb-2">Installation</h2>
+                  <pre className="bg-gray-200 p-2 rounded mb-4">
+                    <code>npm install project-name</code>
+                  </pre>
+                  <h2 className="text-xl font-semibold mb-2">Usage</h2>
+                  <p>Explain how to use the project here. Provide code examples if necessary.</p>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+          {/* Other tab contents would go here */}
+        </Tabs>
+      </main>
+    </div>
+  )
+}
